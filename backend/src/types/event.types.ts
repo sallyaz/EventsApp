@@ -3,9 +3,16 @@ export interface Event {
   title: string;
   location: string;
   date: string;
+  rsvpCount: RSVP;
 }
 
 export interface RSVP {
-  userId: string;
+  participants: string[];
   guests: number;
+}
+export interface User {
+  id: number;
+  userName: string;
+  email: string;
+  password: string;
 }
