@@ -6,12 +6,20 @@ export const mockEvents: Event[] = [
     title: 'Annual Tech Meetup',
     location: 'Tel Aviv',
     date: '2025-06-01',
-    
+    rsvpCount: {
+      participants: ["sally", "ido"],
+      guests: 2
+    },
+
   },
   {
     id: '2',
     title: 'Startup Pitch Night',
     location: 'Jerusalem',
     date: '2025-06-15',
+    rsvpCount: {
+      participants: ["sally"],
+      guests: 1
+    },
   },
 ];
