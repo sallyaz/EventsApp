@@ -1,4 +1,3 @@
-// src/features/auth/authActions.ts
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AppDispatch} from '../../app/store';
 import {setAuthenticated, setLoading} from './authSlice';
