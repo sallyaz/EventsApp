@@ -8,13 +8,13 @@ const NotificationsScreen = () => {
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
     {!eventsInfo ? (
-      <View>
+      <View style={{width:'90%'}}>
         <Image
           source={require('../../../assets/Notifications/notificationIcon.png')}
-          style={{width: 80, height: 80, alignSelf: 'center'}}
+          style={styles.image}
           resizeMode="contain"
         />
-        <TextElement customStyle={{fontSize: 16, fontWeight: '500', marginTop: 10}}>
+        <TextElement customStyle={styles.messageText}>
           There`s No Waiting Notifications. Please Try Later!
         </TextElement>
       </View>
@@ -27,4 +27,16 @@ const NotificationsScreen = () => {
 
 export default NotificationsScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  image: {
+    width: 80,
+    height: 80,
+    alignSelf: 'center',
+  },
+  messageText:{
+    fontSize: 16,
+    fontWeight: '500',
+    marginTop: 10,
+    textAlign: 'center',
+  }
+})
