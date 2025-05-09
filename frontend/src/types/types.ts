@@ -5,3 +5,9 @@ export interface FormState {
   export interface ErrorState {
     [key: string]: string;
   }
+
+  export interface User {
+    id: string;
+    name: string;
+    email: string;
+  }
