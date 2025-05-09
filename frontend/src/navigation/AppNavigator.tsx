@@ -1,4 +1,4 @@
-import React, {use, useEffect} from 'react';
+import React, { useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 
 // Navigation
@@ -10,13 +10,18 @@ import SplashScreen from '../screens/SplashScreen/SplashScreen';
 
 // Redux
 import { navigationRef } from '../utils/navigationRef';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../app/store';
+
+// Redux Thunk
 import { checkAuthStatus } from '../services/auth/authThunk';
+
+// Hooks
+import { useAppDispatch } from '../hooks/useAppDispatch';
 
 
 const AppNavigation: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const isAuth = useSelector((state: RootState) => state.auth.isAuthenticated);
   const isLoading = useSelector((state: RootState) => state.auth.isLoading);
@@ -32,7 +37,7 @@ const AppNavigation: React.FC = () => {
 
   return (
     <NavigationContainer ref={navigationRef}>
-      {renderNavigation()}
+    {renderNavigation()}
     </NavigationContainer>
   );
 };
