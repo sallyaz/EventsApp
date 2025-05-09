@@ -1,11 +1,19 @@
-import React, {Fragment, useState} from 'react';
+import React, { useState} from 'react';
 import {Image, Keyboard, StyleSheet, View} from 'react-native';
-import {useDispatch} from 'react-redux';
 
+// Components
 import ButtonElement from '../../components/reusable/ButtonElement';
 import InputElement from '../../components/reusable/InputElement';
+
+// Utils
 import {ErrorState, FormState} from '../../types/types';
 import {validateForm} from '../../utils/formValidator';
+
+// Services
+import { loginUser } from '../../services/auth/authThunk';
+
+// Redux
+import { useAppDispatch } from '../../hooks/useAppDispatch';
 
 type FieldKey = 'email' | 'password';
 
@@ -19,17 +27,18 @@ const formFields: {
 ];
 
 const SignInScreen = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [formState, setFormState] = useState<FormState>(() =>
     Object.fromEntries(formFields.map(f => [f.key, ''])),
   );
+  const {email, password} = formState;
 
   const [formErrors, setFormErrors] = useState<ErrorState>(() =>
     Object.fromEntries(formFields.map(f => [`${f.key}Error`, ''])),
   );
 
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const secureTextEntry = true;
 
   const updateState = (key: string, value: string) => {
     setFormState(prev => ({...prev, [key]: value}));
@@ -44,8 +53,7 @@ const SignInScreen = () => {
       setFormErrors,
     );
     if (isValid) {
-      // dispatch(loginUser());
-      console.log('Valid form submitted:', formState);
+      dispatch(loginUser(email, password));
     }
   };
 
