@@ -1,11 +1,11 @@
 // features/events/eventsActions.ts
 import { AppDispatch } from '../../app/store';
-import { EventsApi } from './eventsApi';
+import { eventsApi } from './eventsApi';
 import { setEvents } from './eventsSlice';
 
 export const getEvents = () => async (dispatch: AppDispatch) => {
   try {
-    const result = await dispatch(EventsApi.endpoints.events.initiate());
+    const result = await dispatch(eventsApi.endpoints.events.initiate());
     if ('data' in result) {
       dispatch(setEvents(result.data)); 
     } else {
