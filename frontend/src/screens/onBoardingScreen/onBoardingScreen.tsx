@@ -19,7 +19,7 @@ const OnBoardingScreen: React.FC = () => {
 
       <View style={styles.titleContainer}>
         <TextElement customStyle={styles.titleText}>Welcome To</TextElement>
-        <TextElement customStyle={styles.appNameText}>RSVP Events</TextElement>
+        <TextElement customStyle={styles.titleSubText}>RSVP Events</TextElement>
       </View>
 
       <TextElement customStyle={styles.subtitleText}>
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
   },
-  appNameText: {
+  titleSubText: {
     fontSize: 40,
     fontWeight: 'bold',
   },
