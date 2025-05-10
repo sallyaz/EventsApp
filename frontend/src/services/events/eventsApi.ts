@@ -1,5 +1,5 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import { Event } from '../../types/types';
+import {Event} from '../../types/types';
 
 interface PaginatedEventsResponse {
   data: any[]; // Replace with Event[] if you have a type
@@ -41,11 +41,30 @@ export const eventsApi = createApi({
       }),
       invalidatesTags: (result, error, {id}) => [{type: 'Events', id}],
     }),
+
+    updateRSVP: build.mutation<any, {id: number} & Partial<Omit<Event, 'id'>>>({
+      query: ({id, ...body}) => ({
+        url: `/events/${id}/rsvp`,
+        method: 'PATCH',
+        body,
+      }),
+      invalidatesTags: (result, error, {id}) => [{type: 'Events', id}],
+    }),
+    cancelRSVP: build.mutation<any, {id: number; userName: string}>({
+      query: ({id, userName}) => ({
+        url: `/events/${id}/rsvp`,
+        method: 'DELETE',
+        body: {userName},
+      }),
+      invalidatesTags: (result, error, {id}) => [{type: 'Events', id}],
+    }),
   }),
 });
 
 export const {
   useGetAllEventsQuery,
   useGetEventByIdQuery,
+  useUpdateRSVPMutation,
+  useCancelRSVPMutation,
   useRegisterRSVPMutation,
 } = eventsApi;
