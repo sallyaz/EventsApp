@@ -10,31 +10,25 @@ import NotificationsScreen from '../screens/NotificationsScreen/NotificationsScr
 import EventsDetailsScreen from '../screens/EventDetailsScreen/EventDetailsScreen';
 import colors from '../constants/colors';
 
-// Icons 
+// Icons
 import EventsTabIcon from '../../assets/Events/EventsTabIcon'; // Adjust the path as needed
 import NotificationTabIcon from '../../assets/Notifications/NotificationTabIcon'; // Adjust the path as needed
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const TabBarIcon = ({ route, focused }: { route: { name: string }; focused: boolean }) => {
+const TabBarIcon = ({
+  route,
+  focused,
+}: {
+  route: {name: string};
+  focused: boolean;
+}) => {
   switch (route.name) {
     case 'Events':
-      return (
-        <EventsTabIcon
-          width={24}
-          height={24}
-          color={focused ? colors.primary : '#000'}
-        />
-      );
+      return <EventsTabIcon color={focused ? colors.primary : '#000'} />;
     case 'Notifications':
-      return (
-        <NotificationTabIcon
-          width={24}
-          height={24}
-          color={focused ? colors.primary : '#000'}
-        />
-      );
+      return <NotificationTabIcon color={focused ? colors.primary : '#000'} />;
     default:
       return null;
   }
@@ -42,15 +36,16 @@ const TabBarIcon = ({ route, focused }: { route: { name: string }; focused: bool
 
 const TabNavigator = () => {
   return (
-    <Tab.Navigator  
-    screenOptions={({ route }) => ({
-      headerTitle: route.name,
-      tabBarIcon: ({ focused }) => <TabBarIcon route={route} focused={focused} />,
-    })}
-  >
-    <Tab.Screen name="Events" component={EventsScreen} />
-    <Tab.Screen name="Notifications" component={NotificationsScreen} />
-  </Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        headerTitle: route.name,
+        tabBarIcon: ({focused}) => (
+          <TabBarIcon route={route} focused={focused} />
+        ),
+      })}>
+      <Tab.Screen name="Events" component={EventsScreen} />
+      <Tab.Screen name="Notifications" component={NotificationsScreen} />
+    </Tab.Navigator>
   );
 };
 interface MainNavigationProps {}
@@ -66,12 +61,12 @@ const MainNavigation: React.FC<MainNavigationProps> = props => {
       <Stack.Screen
         name="EventsScreen"
         component={EventsScreen}
-        options={{ headerBackTitle: 'Back'}}
+        options={{headerBackTitle: 'Back'}}
       />
       <Stack.Screen
         name="NotificationsScreen"
         component={NotificationsScreen}
-        options={{ headerBackTitle: 'Back'}}
+        options={{headerBackTitle: 'Back'}}
       />
       <Stack.Screen
         name="EventsDetailsScreen"
