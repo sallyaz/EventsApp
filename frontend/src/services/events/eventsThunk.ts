@@ -5,7 +5,7 @@ import { setEvents } from './eventsSlice';
 
 export const getEvents = () => async (dispatch: AppDispatch) => {
   try {
-    const result = await dispatch(eventsApi.endpoints.events.initiate());
+    const result = await dispatch(eventsApi.endpoints.events.initiate(undefined, { forceRefetch: true }));
     if ('data' in result) {
       dispatch(setEvents(result.data)); 
     } else {
