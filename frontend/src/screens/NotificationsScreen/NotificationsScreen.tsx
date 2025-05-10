@@ -1,13 +1,13 @@
 import React from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
 import { useAppSelector } from '../../hooks/useAppDispatch';
-import TextElement from '../../components/reusable/TextElemnt';
+import TextElement from '../../components/reusable/TextElement';
 
 const NotificationsScreen = () => {
    const eventsInfo = useAppSelector((state: any) => state.events?.eventsInfo);
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    {!eventsInfo ? (
+    {eventsInfo.length === 0 ? (
       <View style={{width:'90%'}}>
         <Image
           source={require('../../../assets/Notifications/notificationIcon.png')}
