@@ -1,13 +1,14 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import Config from 'react-native-config';
+import { Event } from '../events/eventsSlice';
 
-export const EventsApi = createApi({
+
+export const eventsApi = createApi({
   reducerPath: 'eventsApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: Config.API_BASE_URL,
+    baseUrl: 'http://192.168.10.4:3001',
   }),
   endpoints: (build) => ({
-    events: build.query<any[], void>({
+    events: build.query<Event[], void>({
       query: () => ({
         url: '/events',
         method: 'GET',
@@ -16,4 +17,4 @@ export const EventsApi = createApi({
   }),
 });
 
-export const {useEventsQuery} = EventsApi;
+export const {useEventsQuery} = eventsApi;
