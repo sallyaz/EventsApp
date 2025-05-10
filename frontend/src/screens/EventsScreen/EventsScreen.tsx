@@ -1,21 +1,29 @@
-import React, { useEffect } from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
-import {useAppDispatch, useAppSelector} from '../../hooks/useAppDispatch';
+import React from 'react';
+import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
+import { useAppSelector} from '../../hooks/useAppDispatch';
 import TextElement from '../../components/reusable/TextElemnt';
-import { getEvents } from '../../services/events/eventsThunk';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+type ItemProps = {
+  title: string;
+  date: string;
+  location: string;
+  description: string;
+  rsvpCount: {participants: number; guests: number};
+};
+
+const Item = ({title, date, location, description, rsvpCount}: ItemProps) => (
+  <View style={styles.item}>
+    <Text style={styles.title}>{rsvpCount.guests}</Text>
+  </View>
+);
 
 const EventsScreen = () => {
   const eventsInfo = useAppSelector((state: any) => state.events?.eventsInfo);
 
-    const dispatch = useAppDispatch();
-  
-      useEffect(() => {
-        // Fetch events data here
-        dispatch(getEvents());
-      }, [])
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      {!eventsInfo ? (
+      {eventsInfo.lenght == 0 ? (
         <View style={{width: '90%'}}>
           <Image
             source={require('../../../assets/Events/eventsIcon.png')}
@@ -28,8 +36,15 @@ const EventsScreen = () => {
           </TextElement>
         </View>
       ) : (
-        <Text>{JSON.stringify(eventsInfo)}</Text>
+        <SafeAreaView style={styles.container}>
+        <FlatList
+          data={eventsInfo}
+          renderItem={({item}) => <Item title={item.title} date={item.date} location={item.location} description={item.description} rsvpCount={item.rsvpCount} />}
+          keyExtractor={item => item.id}
+        />
+      </SafeAreaView>
       )}
+      
     </View>
   );
 };
@@ -42,10 +57,22 @@ const styles = StyleSheet.create({
     height: 80,
     alignSelf: 'center',
   },
-  messageText:{
+  messageText: {
     fontSize: 16,
     fontWeight: '500',
     marginTop: 10,
     textAlign: 'center',
-  }
+  },
+  container: {
+    flex: 1,
+  },
+  item: {
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 32,
+  },
 });
