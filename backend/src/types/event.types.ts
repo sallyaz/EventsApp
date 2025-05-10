@@ -4,6 +4,8 @@ export interface Event {
   location: string;
   date: string;
   rsvpCount: RSVP;
+  description: string;
+  image: string;
 }
 
 export interface RSVP {
