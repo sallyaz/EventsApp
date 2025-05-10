@@ -6,15 +6,18 @@ import {
   ScrollView,
   Dimensions,
   Button,
-  Alert,
 } from 'react-native';
 import {useRoute, RouteProp} from '@react-navigation/native';
 import TextElement from '../../components/reusable/TextElement';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
+  useCancelRSVPMutation,
   useGetEventByIdQuery,
   useRegisterRSVPMutation,
+  useUpdateRSVPMutation,
 } from '../../services/events/eventsApi';
+import {goBack} from '../../utils/navigationRef';
+import {CancelRSVPHandler, RegisterRSVPHandler, UpdateRSVPHandler} from '../../components/EventDetailsHelper/EventDetailsHelper';
 
 type Params = {
   EventsDetailsScreen: {
@@ -26,10 +29,13 @@ const screenWidth = Dimensions.get('window').width;
 
 const EventDetailsScreen = () => {
   const route = useRoute<RouteProp<Params, 'EventsDetailsScreen'>>();
-  const {id} = route.params;
+  const {id: eId} = route.params;
+  const id = Number(eId);
 
   const {data: event, refetch} = useGetEventByIdQuery(id);
-  const [registerRSVP, {error}] = useRegisterRSVPMutation();
+  const [registerRSVP, {error: registerError}] = useRegisterRSVPMutation();
+  const [updateRSVP, {error: updateError}] = useUpdateRSVPMutation();
+  const [cancelRSVP, {error: cancelError}] = useCancelRSVPMutation();
 
   const [hasRSVPed, setHasRSVPed] = useState(false);
 
@@ -38,7 +44,8 @@ const EventDetailsScreen = () => {
       try {
         const userName = await AsyncStorage.getItem('userName');
         const isRegistered = event?.rsvpCount.participants.find(
-            (participant: any) => participant === userName);
+          (participant: any) => participant === userName,
+        );
         setHasRSVPed(!!isRegistered);
       } catch (e) {
         console.error('Error checking RSVP status:', e);
@@ -47,21 +54,7 @@ const EventDetailsScreen = () => {
     checkRSVPStatus();
   }, [event]);
 
-  const handleRSVP = async () => {
-    try {
-      const userName = await AsyncStorage.getItem('userName');
-      if (!id || !userName) {
-        Alert.alert('Invalid user or event ID');
-        return;
-      }
-      await registerRSVP({id, userName}).unwrap();
-      await refetch().unwrap();
-      setHasRSVPed(true);
-    } catch (e) {
-      console.error('Error in RSVP:', e);
-      Alert.alert('RSVP Failed');
-    }
-  };
+  
 
   if (!event) {
     return (
@@ -70,33 +63,9 @@ const EventDetailsScreen = () => {
       </View>
     );
   }
-//   const handleUpdate = async () => {
-//     try {
-//       const userName = await AsyncStorage.getItem('userName');
-//       if (!userName) return;
-  
-//       const guests = (event?.rsvpCount.guests || 0) + 1;
-//       await updateRSVP({ id, userName, guests }).unwrap();
-//       await refetch();
-//       Alert.alert('RSVP Updated');
-//     } catch (e) {
-//       Alert.alert('Update Failed');
-//     }
-//   };
-
-//   const handleCancel = async () => {
-//     try {
-//       const userName = await AsyncStorage.getItem('userName');
-//       if (!userName) return;
-  
-//       await cancelRSVP({ id, userName }).unwrap();
-//       await refetch();
-//       setHasRSVPed(false);
-//       Alert.alert('RSVP Cancelled');
-//     } catch (e) {
-//       Alert.alert('Cancellation Failed');
-//     }
-//   };
+  const onRegister = RegisterRSVPHandler(id,registerRSVP,refetch,setHasRSVPed,registerError);;
+   const onUpdate = UpdateRSVPHandler(id, event, updateRSVP, refetch, updateError);
+   const onCancel = CancelRSVPHandler( goBack, cancelRSVP, id, refetch, event, setHasRSVPed, cancelError);
 
   return (
     <ScrollView style={styles.container}>
@@ -114,12 +83,12 @@ const EventDetailsScreen = () => {
         <InfoItem label="📝 Description" value={event.description} />
 
         <View style={styles.buttonGroup}>
-          {!hasRSVPed && <Button title="Register RSVP" onPress={handleRSVP} />}
+          {!hasRSVPed && <Button title="Register RSVP" onPress={onRegister} />}
           {hasRSVPed && (
             <>
-              <Button title="Update RSVP" />
+              <Button title="Update RSVP"  onPress={onUpdate}/>
               <View style={{marginVertical: 6}} />
-              <Button title="Cancel RSVP" color="red" />
+              <Button title="Cancel RSVP" color="red" onPress={onCancel}/>
             </>
           )}
         </View>
