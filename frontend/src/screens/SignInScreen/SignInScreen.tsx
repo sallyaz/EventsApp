@@ -1,5 +1,5 @@
-import React, { useState} from 'react';
-import {Image, Keyboard, StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
+import {Alert, Image, Keyboard, StyleSheet, View} from 'react-native';
 
 // Components
 import ButtonElement from '../../components/reusable/ButtonElement';
@@ -9,11 +9,11 @@ import InputElement from '../../components/reusable/InputElement';
 import {ErrorState, FormState} from '../../types/types';
 import {validateForm} from '../../utils/formValidator';
 
-// Services
-import { loginUser } from '../../services/auth/authThunk';
-
 // Redux
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+import {useAppDispatch} from '../../hooks/useAppDispatch';
+import {useLoginMutation} from '../../services/auth/authApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setAuthenticated } from '../../services/auth/authSlice';
 
 type FieldKey = 'email' | 'password';
 
@@ -28,6 +28,7 @@ const formFields: {
 
 const SignInScreen = () => {
   const dispatch = useAppDispatch();
+  const [login] = useLoginMutation();
 
   const [formState, setFormState] = useState<FormState>(() =>
     Object.fromEntries(formFields.map(f => [f.key, ''])),
@@ -45,15 +46,22 @@ const SignInScreen = () => {
     setFormErrors(prev => ({...prev, [`${key}Error`]: ''}));
   };
 
-  const onSubmit = () => {
-    Keyboard.dismiss();
-    const isValid = validateForm(
-      formState.email,
-      formState.password,
-      setFormErrors,
-    );
-    if (isValid) {
-      dispatch(loginUser(email, password));
+  const onSubmit = async () => {
+    try {
+      Keyboard.dismiss();
+      const isValid = validateForm(
+        formState.email,
+        formState.password,
+        setFormErrors,
+      );
+      if (isValid) {
+        const res = await login({email, password}).unwrap();
+        await AsyncStorage.setItem('userName', res.userName);
+        dispatch(setAuthenticated(true));
+      }
+    } catch (e) {
+      console.error('Login failed:', e);
+      Alert.alert('Login failed', 'Invalid credentials or network issue');
     }
   };
 

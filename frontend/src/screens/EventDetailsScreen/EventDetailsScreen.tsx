@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Image,
@@ -8,23 +8,17 @@ import {
   Button,
   Alert,
 } from 'react-native';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import {useRoute, RouteProp} from '@react-navigation/native';
 import TextElement from '../../components/reusable/TextElement';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
-// import { registerRSVP, updateRSVP, cancelRSVP } from '../../features/events/rsvpActions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  useGetEventByIdQuery,
+  useRegisterRSVPMutation,
+} from '../../services/events/eventsApi';
 
 type Params = {
   EventsDetailsScreen: {
-    id: string;
-    title: string;
-    date: string;
-    location: string;
-    rsvpCount: {
-      participants: number;
-      guests: number;
-    };
-    description: string;
-    image: string;
+    id: number;
   };
 };
 
@@ -32,74 +26,100 @@ const screenWidth = Dimensions.get('window').width;
 
 const EventDetailsScreen = () => {
   const route = useRoute<RouteProp<Params, 'EventsDetailsScreen'>>();
-  const {
-    id,
-    title,
-    date,
-    location,
-    rsvpCount,
-    description,
-    image,
-  } = route.params;
+  const {id} = route.params;
 
-  const dispatch = useAppDispatch();
+  const {data: event, refetch} = useGetEventByIdQuery(id);
+  const [registerRSVP, {error}] = useRegisterRSVPMutation();
 
   const [hasRSVPed, setHasRSVPed] = useState(false);
-  const [guests, setGuests] = useState(1);
+
+  useEffect(() => {
+    const checkRSVPStatus = async () => {
+      try {
+        const userName = await AsyncStorage.getItem('userName');
+        const isRegistered = event?.rsvpCount.participants.find(
+            (participant: any) => participant === userName);
+        setHasRSVPed(!!isRegistered);
+      } catch (e) {
+        console.error('Error checking RSVP status:', e);
+      }
+    };
+    checkRSVPStatus();
+  }, [event]);
 
   const handleRSVP = async () => {
     try {
-    //   await dispatch(registerRSVP({ id, guests }));
+      const userName = await AsyncStorage.getItem('userName');
+      if (!id || !userName) {
+        Alert.alert('Invalid user or event ID');
+        return;
+      }
+      await registerRSVP({id, userName}).unwrap();
+      await refetch().unwrap();
       setHasRSVPed(true);
-      Alert.alert('RSVP Successful');
     } catch (e) {
+      console.error('Error in RSVP:', e);
       Alert.alert('RSVP Failed');
     }
   };
 
-  const handleUpdate = async () => {
-    try {
-      const newGuestCount = guests + 1;
-    //   await dispatch(updateRSVP({ id, guests: newGuestCount }));
-      setGuests(newGuestCount);
-      Alert.alert('RSVP Updated');
-    } catch (e) {
-      Alert.alert('Update Failed');
-    }
-  };
+  if (!event) {
+    return (
+      <View style={styles.loading}>
+        <TextElement>Loading event details...</TextElement>
+      </View>
+    );
+  }
+//   const handleUpdate = async () => {
+//     try {
+//       const userName = await AsyncStorage.getItem('userName');
+//       if (!userName) return;
+  
+//       const guests = (event?.rsvpCount.guests || 0) + 1;
+//       await updateRSVP({ id, userName, guests }).unwrap();
+//       await refetch();
+//       Alert.alert('RSVP Updated');
+//     } catch (e) {
+//       Alert.alert('Update Failed');
+//     }
+//   };
 
-  const handleCancel = async () => {
-    try {
-    //   await dispatch(cancelRSVP(id));
-      setHasRSVPed(false);
-      setGuests(1);
-      Alert.alert('RSVP Cancelled');
-    } catch (e) {
-      Alert.alert('Cancellation Failed');
-    }
-  };
+//   const handleCancel = async () => {
+//     try {
+//       const userName = await AsyncStorage.getItem('userName');
+//       if (!userName) return;
+  
+//       await cancelRSVP({ id, userName }).unwrap();
+//       await refetch();
+//       setHasRSVPed(false);
+//       Alert.alert('RSVP Cancelled');
+//     } catch (e) {
+//       Alert.alert('Cancellation Failed');
+//     }
+//   };
 
   return (
     <ScrollView style={styles.container}>
-      <Image source={{ uri: image }} style={styles.bannerImage} resizeMode="cover" />
+      <Image
+        source={{uri: event.image}}
+        style={styles.bannerImage}
+        resizeMode="cover"
+      />
 
       <View style={styles.content}>
-        <TextElement customStyle={styles.title}>{title}</TextElement>
-
-        <InfoItem label="📅 Date" value={date} />
-        <InfoItem label="📍 Location" value={location} />
-        <InfoItem label="👥 Guests" value={`${rsvpCount.guests}`} />
-        <InfoItem label="📝 Description" value={description} />
+        <TextElement customStyle={styles.title}>{event.title}</TextElement>
+        <InfoItem label="📅 Date" value={event.date} />
+        <InfoItem label="📍 Location" value={event.location} />
+        <InfoItem label="👥 Guests" value={`${event?.rsvpCount.guests ?? 0}`} />
+        <InfoItem label="📝 Description" value={event.description} />
 
         <View style={styles.buttonGroup}>
-          {!hasRSVPed && (
-            <Button title="Register RSVP" onPress={handleRSVP} />
-          )}
+          {!hasRSVPed && <Button title="Register RSVP" onPress={handleRSVP} />}
           {hasRSVPed && (
             <>
-              <Button title="Update RSVP" onPress={handleUpdate} />
-              <View style={{ marginVertical: 6 }} />
-              <Button title="Cancel RSVP" color="red" onPress={handleCancel} />
+              <Button title="Update RSVP" />
+              <View style={{marginVertical: 6}} />
+              <Button title="Cancel RSVP" color="red" />
             </>
           )}
         </View>
@@ -108,7 +128,7 @@ const EventDetailsScreen = () => {
   );
 };
 
-const InfoItem = ({ label, value }: { label: string; value: string }) => (
+const InfoItem = ({label, value}: {label: string; value: string}) => (
   <View style={styles.infoItem}>
     <TextElement customStyle={styles.infoLabel}>{label}</TextElement>
     <TextElement customStyle={styles.infoValue}>{value}</TextElement>
@@ -121,6 +141,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   bannerImage: {
     width: screenWidth,

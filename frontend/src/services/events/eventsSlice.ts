@@ -1,15 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-
-export interface Event {
-  id: string;
-  title: string;
-  date: string;
-  location: string;
-  description: string;
-  image: string;
-  rsvpCount: number;
-  // add more fields as needed
-}
+import { Event } from '../../types/types';
 
 interface EventsState {
   eventsInfo: Event[];

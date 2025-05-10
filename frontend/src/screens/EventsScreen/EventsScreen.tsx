@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {FlatList, Image, StyleSheet, RefreshControl, View} from 'react-native';
-import { navigate } from '../../utils/navigationRef';
-// Redux
-import {useAppDispatch, useAppSelector} from '../../hooks/useAppDispatch';
-import { getEvents } from '../../services/events/eventsThunk';
+import {navigate} from '../../utils/navigationRef';
 
 // Reusable Components
 import TextElement from '../../components/reusable/TextElement';
 import ButtonElement from '../../components/reusable/ButtonElement';
 import ScreenWrapper from '../../components/screenWrapper/ScreenWrapper';
 import colors from '../../constants/colors';
+import { useGetAllEventsQuery } from '../../services/events/eventsApi';
 
 type ItemProps = {
+  id:number;
   title: string;
   date: string;
   location: string;
@@ -20,7 +19,15 @@ type ItemProps = {
   image: string;
 };
 
-const Item = ({title, date, location, rsvpCount, description, image}: ItemProps) => (
+const Item = ({
+  id,
+  title,
+  date,
+  location,
+  rsvpCount,
+  description,
+  image,
+}: ItemProps) => (
   <View style={styles.item}>
     <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
       <Image
@@ -40,13 +47,13 @@ const Item = ({title, date, location, rsvpCount, description, image}: ItemProps)
       title={'RSVP'}
       onPress={() => {
         navigate('EventsDetailsScreen', {
+          id: id,
           title: title,
           date: date,
           location: location,
           rsvpCount: rsvpCount,
           description: description,
-          image : image,
-
+          image: image,
         });
         console.log(` 👥 RSVP for ${title}`);
       }}
@@ -55,19 +62,19 @@ const Item = ({title, date, location, rsvpCount, description, image}: ItemProps)
 );
 
 const EventsScreen = () => {
-  const dispatch = useAppDispatch();
-  const eventsInfo = useAppSelector((state: any) => state.events?.eventsInfo);
   const [refreshing, setRefreshing] = useState(false);
+  const { data, refetch } = useGetAllEventsQuery();
 
   const onRefresh = async () => {
-    setRefreshing(true);
-    await dispatch(getEvents());
+    await refetch();
     setRefreshing(false);
   };
 
   return (
-    <ScreenWrapper backgroundColor={colors.bgColor}>
-      {eventsInfo.length === 0 ? (
+    <ScreenWrapper
+      style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
+      backgroundColor={colors.bgColor}>
+      {!data || data.length === 0 ? (
         <View style={{width: '90%'}}>
           <Image
             source={require('../../../assets/Events/eventsIcon.png')}
@@ -79,29 +86,29 @@ const EventsScreen = () => {
           </TextElement>
         </View>
       ) : (
-          <FlatList
-            data={eventsInfo}
-            renderItem={({item}) => (
-              <Item
-                title={item.title}
-                date={item.date}
-                location={item.location}
-                rsvpCount={item.rsvpCount}
-                description={item.description}
-                image={item.image}
-              />
-            )}
-            keyExtractor={item => item.id}
-            refreshControl={
-              <RefreshControl
+        <FlatList
+          data={data || []}
+          renderItem={({item}) => (
+            <Item
+              id={item.id}
+              title={item.title}
+              date={item.date}
+              location={item.location}
+              rsvpCount={item.rsvpCount}
+              description={item.description}
+              image={item.image}
+            />
+          )}
+          keyExtractor={item => item.id.toString()}
+          refreshControl={
+            <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
               colors={['grey']}
               progressBackgroundColor={'black'}
             />
-            }
-          />
-   
+          }
+        />
       )}
     </ScreenWrapper>
   );
@@ -124,7 +131,7 @@ const styles = StyleSheet.create({
 
   item: {
     borderRadius: 15,
-    borderWidth: .2,
+    borderWidth: 0.2,
     padding: 20,
     marginVertical: 10,
     marginHorizontal: 16,
