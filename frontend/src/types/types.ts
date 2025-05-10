@@ -8,6 +8,19 @@ export interface FormState {
 
   export interface User {
     id: string;
-    name: string;
+    userName: string;
     email: string;
+  }
+
+  export interface Event {
+    id: number;
+    title: string;
+    date: string;
+    location: string;
+    description: string;
+    image: string;
+    rsvpCount: {
+      participants: { userName: string }[];
+      guests: number;
+    };
   }
