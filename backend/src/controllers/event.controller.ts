@@ -3,8 +3,30 @@ import { mockEvents } from '../mocks/events.mock';
 import { mockUsers } from '../mocks/users.mock';
 
 // GET /events
-export const getAllEvents = (_: Request, res: Response) => {
-  res.status(200).json(mockEvents);
+export const getAllEvents = (req: Request, res: Response) => {
+  const pageParam = req.query.page;
+  const limitParam = req.query.limit;
+
+  // If no pagination params provided → return all events
+  if (!pageParam || !limitParam) {
+    return res.status(200).json(mockEvents);
+  }
+
+  // Otherwise paginate
+  const page = parseInt(pageParam as string, 10) || 1;
+  const limit = parseInt(limitParam as string, 10) || 10;
+
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+
+  const paginatedEvents = mockEvents.slice(startIndex, endIndex);
+
+  res.status(200).json({
+    data: paginatedEvents,
+    currentPage: page,
+    totalPages: Math.ceil(mockEvents.length / limit),
+    totalItems: mockEvents.length,
+  });
 };
 
 // GET /events/:id
