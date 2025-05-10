@@ -1,11 +1,22 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 export interface Event {
-  eventsInfo: any;
+  id: string;
+  title: string;
+  date: string;
+  location: string;
+  description: string;
+  image: string;
+  rsvpCount: number;
+  // add more fields as needed
 }
 
-const initialState: Event = {
-  eventsInfo: [], // Initialize eventInfo to null or an empty object
+interface EventsState {
+  eventsInfo: Event[];
+}
+
+const initialState: EventsState = {
+  eventsInfo: [],
 };
 
 const eventsSlice = createSlice({
@@ -14,7 +25,6 @@ const eventsSlice = createSlice({
   reducers: {
     setEvents: (state, action) => {
       state.eventsInfo = action.payload;
-      console.log('🚀 ~ state.eventInfo:', state.eventsInfo);
     },
   },
 });
