@@ -1,16 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import LottieView from 'lottie-react-native';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { getEvents } from '../../services/events/eventsThunk';
 
 const SplashScreen = () => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => { 
-    dispatch(getEvents());
-  },[]);
-
   return (
     <View style={styles.container}>
       <LottieView
