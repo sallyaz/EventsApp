@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { navigate } from '../../utils/navigationRef';
-import TextElement from '../../components/reusable/TextElemnt';
+import TextElement from '../../components/reusable/TextElement';
 import ButtonElement from '../../components/reusable/ButtonElement';
 
 const OnBoardingScreen: React.FC = () => {
