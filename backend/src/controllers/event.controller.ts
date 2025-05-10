@@ -33,7 +33,8 @@ export const getAllEvents = (req: Request, res: Response) => {
 // This endpoint retrieves a specific event by its ID
 export const getEventById = (req: Request, res: Response) => {
   const { id } = req.params;
-  const event = mockEvents.find(e => e.id === id);
+  const eventId = Number(id);
+  const event = mockEvents.find(e => e.id === eventId);
   if (!event) return res.status(404).json({ error: 'Event not found' });
   res.status(200).json(event);
 };
@@ -42,9 +43,10 @@ export const getEventById = (req: Request, res: Response) => {
 // This endpoint allows a user to RSVP to an event
 export const registerRSVP = (req: Request, res: Response) => {
   const { id } = req.params;
+  const eventId = Number(id);
   const { userName } = req.body ;
-  const event = mockEvents.find(e => e.id === id);
-  const eventIndex = mockEvents.findIndex(e => e.id === id);
+  const event = mockEvents.find(e => e.id === eventId);
+  const eventIndex = mockEvents.findIndex(e => e.id === eventId);
   if (!event) return res.status(404).json({ error: 'Event not found' });
 
   if(event.rsvpCount.participants.includes(userName)) {
@@ -60,15 +62,23 @@ export const registerRSVP = (req: Request, res: Response) => {
 // This endpoint allows a user to update their RSVP to an event
 export const updateRSVP = (req: Request, res: Response) => {
   const { id } = req.params;
-  const { title, location, date } = req.body;
-  const event = mockEvents.find(e => e.id === id);
-  const eventIndex = mockEvents.findIndex(e => e.id === id);
-  if (!event) return res.status(404).json({ error: 'Event not found' });
-  
+  const eventId = Number(id); 
+  const { title, location, date, description, rsvpCount } = req.body;
+  const event = mockEvents.find(e => e.id === eventId);
+  const eventIndex = mockEvents.findIndex(e => e.id === eventId);
+  if (!event || eventIndex === -1) return res.status(404).json({ error: 'Event not found' });
+
   if (title) event.title = title;
   if (location) event.location = location;
   if (date) event.date = date;
+  if (description) event.description = description;
 
+  if (rsvpCount) {
+    event.rsvpCount = {
+      ...event.rsvpCount,
+      ...rsvpCount, 
+    };
+  }
   mockEvents[eventIndex] = event;
 
   res.status(200).json({ message: 'RSVP updated' ,event: mockEvents[eventIndex] });
@@ -77,8 +87,8 @@ export const updateRSVP = (req: Request, res: Response) => {
 // This endpoint allows a user to cancel their RSVP to an event
 export const cancelRSVP = (req: Request, res: Response) => {
   const { id } = req.params;
-
-  const updateMockEvent = mockEvents.filter(e => e.id != id);
+  const eventId = Number(id);
+  const updateMockEvent = mockEvents.filter(e => e.id != eventId);
   mockEvents.length = 0;
   mockEvents.push(...updateMockEvent);
 
