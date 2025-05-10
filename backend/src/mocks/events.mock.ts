@@ -2,7 +2,7 @@ import { Event } from '../types/event.types.js';
 
 export const mockEvents: Event[] = [
   {
-    id: '1',
+    id: 1,
     title: 'React Native Global Summit',
     location: 'San Francisco, CA',
     date: '2025-06-12',
@@ -14,7 +14,7 @@ export const mockEvents: Event[] = [
     }
   },
   {
-    id: '2',
+    id: 2,
     title: 'AI for Social Good Forum',
     location: 'New York, NY',
     date: '2025-06-20',
@@ -26,7 +26,7 @@ export const mockEvents: Event[] = [
     }
   },
   {
-    id: '3',
+    id: 3,
     title: 'Women in Tech Leadership Retreat',
     location: 'Austin, TX',
     date: '2025-07-03',
@@ -38,7 +38,7 @@ export const mockEvents: Event[] = [
     }
   },
   {
-    id: '4',
+    id: 4,
     title: 'Future of Work Hackathon',
     location: 'Online',
     date: '2025-07-15',
@@ -50,7 +50,7 @@ export const mockEvents: Event[] = [
     }
   },
   {
-    id: '5',
+    id: 5,
     title: 'Climate Tech Startup Showcase',
     location: 'Berlin, Germany',
     date: '2025-08-01',
@@ -62,7 +62,7 @@ export const mockEvents: Event[] = [
     }
   },
   {
-    id: '6',
+    id: 6,
     title: 'Global DevOps Conference',
     location: 'Toronto, Canada',
     date: '2025-08-20',
@@ -74,7 +74,7 @@ export const mockEvents: Event[] = [
     }
   },
   {
-    id: '7',
+    id: 7,
     title: 'Creative Code & Design Jam',
     location: 'Amsterdam, Netherlands',
     date: '2025-09-05',
@@ -86,7 +86,7 @@ export const mockEvents: Event[] = [
     }
   },
   {
-    id: '8',
+    id: 8,
     title: 'Ethics in AI Symposium',
     location: 'London, UK',
     date: '2025-09-18',
@@ -98,7 +98,7 @@ export const mockEvents: Event[] = [
     }
   },
   {
-    id: '9',
+    id: 9,
     title: 'Open Source Maintainers Summit',
     location: 'Seattle, WA',
     date: '2025-10-10',
@@ -110,7 +110,7 @@ export const mockEvents: Event[] = [
     }
   },
   {
-    id: '10',
+    id: 10,
     title: 'End-of-Year Tech Celebration',
     location: 'Los Angeles, CA',
     date: '2025-12-19',
