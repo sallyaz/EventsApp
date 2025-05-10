@@ -10,7 +10,7 @@ export const mockEvents: Event[] = [
     image: 'https://picsum.photos/id/1011/600/400',
     rsvpCount: {
       participants: ['john', 'sarah', 'mike'],
-      guests: 2
+      guests: 3
     }
   },
   {
@@ -22,7 +22,7 @@ export const mockEvents: Event[] = [
     image: 'https://picsum.photos/id/1005/600/400',
     rsvpCount: {
       participants: ['lior', 'maya'],
-      guests: 1
+      guests: 2
     }
   },
   {
@@ -34,7 +34,7 @@ export const mockEvents: Event[] = [
     image: 'https://picsum.photos/id/1027/600/400',
     rsvpCount: {
       participants: ['noa', 'rachel', 'sally'],
-      guests: 0
+      guests: 3
     }
   },
   {
@@ -46,7 +46,7 @@ export const mockEvents: Event[] = [
     image: 'https://picsum.photos/id/1035/600/400',
     rsvpCount: {
       participants: ['ido'],
-      guests: 3
+      guests: 1
     }
   },
   {
@@ -81,7 +81,7 @@ export const mockEvents: Event[] = [
     description: 'A celebration of experimental interfaces, generative art, and creative development.',
     image: 'https://picsum.photos/id/1012/600/400',
     rsvpCount: {
-      participants: ['noa', 'lior'],
+      participants: [],
       guests: 0
     }
   },
@@ -94,7 +94,7 @@ export const mockEvents: Event[] = [
     image: 'https://picsum.photos/id/1020/600/400',
     rsvpCount: {
       participants: ['sarah', 'rachel'],
-      guests: 1
+      guests: 2
     }
   },
   {
@@ -106,7 +106,7 @@ export const mockEvents: Event[] = [
     image: 'https://picsum.photos/id/1024/600/400',
     rsvpCount: {
       participants: ['mike', 'john'],
-      guests: 0
+      guests: 2
     }
   },
   {
@@ -118,7 +118,7 @@ export const mockEvents: Event[] = [
     image: 'https://picsum.photos/id/1002/600/400',
     rsvpCount: {
       participants: ['maya', 'lior', 'sally'],
-      guests: 5
+      guests: 3
     }
   }
 ];
