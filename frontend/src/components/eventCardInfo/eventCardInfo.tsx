@@ -36,7 +36,7 @@ const EventCardItem = ({
           style={styles.image}
           resizeMode="contain"
         />
-        <View style={{ marginVertical: 10 }}>
+        <View style={{ marginVertical: 20 }}>
           <TextElement customStyle={styles.title}>{title}</TextElement>
           <TextElement>🗓️ Where: {location}</TextElement>
           <TextElement>📍 When: {date}</TextElement>
