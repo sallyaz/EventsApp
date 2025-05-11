@@ -1,92 +1,55 @@
-import React, {useState} from 'react';
-import {
-  FlatList,
-  Image,
-  StyleSheet,
-  RefreshControl,
-  View,
-  Platform,
-} from 'react-native';
-import {navigate} from '../../utils/navigationRef';
+import React, {useEffect, useState} from 'react';
+import {FlatList, Image, StyleSheet, RefreshControl, View} from 'react-native';
 
 // Reusable Components
 import TextElement from '../../components/reusable/TextElement';
-import ButtonElement from '../../components/reusable/ButtonElement';
 import ScreenWrapper from '../../components/screenWrapper/ScreenWrapper';
 import colors from '../../constants/colors';
-import {useGetAllEventsQuery} from '../../services/events/eventsApi';
-
-type ItemProps = {
-  id: number;
-  title: string;
-  date: string;
-  location: string;
-  rsvpCount: {participants: number; guests: number};
-  description: string;
-  image: string;
-};
-
-const Item = ({
-  id,
-  title,
-  date,
-  location,
-  rsvpCount,
-  description,
-  image,
-}: ItemProps) => (
-  <View
-    style={{
-      ...styles.item,
-      borderWidth: Platform.OS === 'ios' ? 0.5 : 1,
-      padding: 20,
-    }}>
-    <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
-      <Image
-        source={require('../../../assets/Events/eventsIcon.png')}
-        style={styles.image}
-        resizeMode="contain"
-      />
-      <View style={{marginVertical: 10}}>
-        <TextElement customStyle={styles.title}>{title}</TextElement>
-        <TextElement>🗓️ Where: {location}</TextElement>
-        <TextElement>📍 When: {date}</TextElement>
-        <TextElement>👥 RSVP Count: {rsvpCount.guests}</TextElement>
-      </View>
-    </View>
-
-    <ButtonElement
-      title={'RSVP'}
-      onPress={() => {
-        navigate('EventsDetailsScreen', {
-          id: id,
-          title: title,
-          date: date,
-          location: location,
-          rsvpCount: rsvpCount,
-          description: description,
-          image: image,
-        });
-        console.log(` 👥 RSVP for ${title}`);
-      }}
-    />
-  </View>
-);
+import {useGetPaginatedEventsQuery} from '../../services/events/eventsApi';
+import EventCardInfo, { EventCardProps } from '../../components/eventCardInfo/eventCardInfo';
 
 const EventsScreen = () => {
+  const [page, setPage] = useState(1);
+  const [eventsList, setEventsList] = useState<EventCardProps[]>([]);
+
   const [refreshing, setRefreshing] = useState(false);
-  const {data, refetch} = useGetAllEventsQuery();
+  const {data, isFetching, refetch} = useGetPaginatedEventsQuery({
+    page,
+    limit: 5,
+  });
+
+  const onEndReached = () => {
+    if (
+      !isFetching &&
+      data?.currentPage !== undefined &&
+      data?.totalPages !== undefined
+    ) {
+      if (data.currentPage < data.totalPages) {
+        setPage(prev => prev + 1);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (data?.data) {
+      setEventsList(prev =>
+        page === 1
+          ? data.data
+          : [...prev, ...data.data.filter(e => !prev.find(p => p.id === e.id))],
+      );
+    }
+  }, [data, page]);
 
   const onRefresh = async () => {
+    setRefreshing(true);
+    setPage(1);
     await refetch();
     setRefreshing(false);
   };
 
   return (
-    <ScreenWrapper
-      style={styles.screenWrap}
-      backgroundColor={colors.bgColor}>
-      {!data || data.length === 0 ? (
+    <ScreenWrapper style={styles.screenWrap} backgroundColor={colors.bgColor}>
+      {!data || data.data.length === 0 ? (
         <View style={{width: '90%'}}>
           <Image
             source={require('../../../assets/Events/eventsIcon.png')}
@@ -99,9 +62,11 @@ const EventsScreen = () => {
         </View>
       ) : (
         <FlatList
-          data={data || []}
+          data={eventsList}
+          onEndReached={onEndReached}
+          onEndReachedThreshold={0.5}
           renderItem={({item}) => (
-            <Item
+            <EventCardInfo
               id={item.id}
               title={item.title}
               date={item.date}
