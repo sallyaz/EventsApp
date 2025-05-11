@@ -4,6 +4,7 @@ import TextElement from '../../components/reusable/TextElement';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NotificationItem } from '../../types/types';
+
 const NOTIFICATION_KEY = 'SAVED_NOTIFICATIONS';
 
 const NotificationsScreen = () => {
