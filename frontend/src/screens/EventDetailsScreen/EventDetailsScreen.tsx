@@ -21,12 +21,6 @@ import {goBack} from '../../utils/navigationRef';
 import {CancelRSVPHandler, RegisterRSVPHandler, UpdateRSVPHandler} from '../../components/EventDetailsHelper/EventDetailsHelper';
 import ButtonElement from '../../components/reusable/ButtonElement';
 
-type Params = {
-  EventsDetailsScreen: {
-    id: number;
-  };
-};
-
 const screenWidth = Dimensions.get('window').width;
 
 const EventDetailsScreen = () => {
