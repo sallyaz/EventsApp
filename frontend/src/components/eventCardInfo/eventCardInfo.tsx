@@ -3,6 +3,7 @@ import { View, Image, Platform, StyleSheet } from 'react-native';
 import TextElement from '../reusable/TextElement';
 import ButtonElement from '../reusable/ButtonElement';
 import { navigate } from '../../utils/navigationRef';
+import { useGetEventByIdQuery } from '../../services/events/eventsApi';
 
 export type EventCardProps = {
   id: number;
@@ -23,6 +24,23 @@ const EventCardItem = ({
   description,
   image,
 }: EventCardProps) => {
+  const { data: latestEvent } = useGetEventByIdQuery(id);
+  console.log("🚀 ~ latestEvent:", latestEvent)
+
+ // Use freshest data if available
+ const activeEvent = latestEvent ?? {
+    id,
+    title,
+    date,
+    location,
+    rsvpCount,
+    description,
+    image,
+  };
+
+
+
+
   return (
     <View
       style={{
@@ -37,10 +55,10 @@ const EventCardItem = ({
           resizeMode="contain"
         />
         <View style={{ marginVertical: 20 }}>
-          <TextElement customStyle={styles.title}>{title}</TextElement>
-          <TextElement>🗓️ Where: {location}</TextElement>
-          <TextElement>📍 When: {date}</TextElement>
-          <TextElement>👥 RSVP Count: {rsvpCount.guests}</TextElement>
+          <TextElement customStyle={styles.title}>{activeEvent.title}</TextElement>
+          <TextElement>🗓️ Where: {activeEvent.location}</TextElement>
+          <TextElement>📍 When: {activeEvent.date}</TextElement>
+          <TextElement>👥 RSVP Count: {activeEvent.rsvpCount.guests}</TextElement>
         </View>
       </View>
 
@@ -48,13 +66,13 @@ const EventCardItem = ({
         title={'RSVP'}
         onPress={() => {
           navigate('EventsDetailsScreen', {
-            id,
-            title,
-            date,
-            location,
-            rsvpCount,
-            description,
-            image,
+            id: activeEvent.id,
+            title: activeEvent.title,
+            date: activeEvent.date,
+            location: activeEvent.location,
+            rsvpCount: activeEvent.rsvpCount,
+            description:  activeEvent.description,
+            image: activeEvent.image,
           });
           console.log(`👥 RSVP for ${title}`);
         }}
