@@ -15,15 +15,15 @@ export const eventsApi = createApi({
   }),
   tagTypes: ['Events'], // Define the tag type
   endpoints: build => ({
-    getAllEvents: build.query<any[], void>({
-      query: () => ({
-        url: '/events',
+    getAllEvents: build.query<PaginatedEventsResponse, { page: number; limit?: number }>({
+      query: ({ page, limit = 10 }) => ({
+        url: `/events?page=${page}&limit=${limit}`,
         method: 'GET',
       }),
-      providesTags: result =>
-        result
-          ? result.map(({id}) => ({type: 'Events', id}))
-          : [{type: 'Events', id: 'LIST'}],
+      providesTags: (result) =>
+        result?.data
+          ? result.data.map((event) => ({ type: 'Events' as const, id: event.id }))
+          : [{ type: 'Events', id: 'LIST' }],
     }),
 
     getEventById: build.query<Event, number>({
@@ -62,7 +62,7 @@ export const eventsApi = createApi({
 });
 
 export const {
-  useGetAllEventsQuery,
+  useGetAllEventsQuery: useGetPaginatedEventsQuery,
   useGetEventByIdQuery,
   useUpdateRSVPMutation,
   useCancelRSVPMutation,
