@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert} from 'react-native';
-import {onCreateTriggerNotification, onDisplayNotification} from '../notificationsHandler/notificationsHandler';
+import {onCreateTriggerNotification, onDisplayNotification} from '../NotificationsHandler/NotificationsHandler';
 
 export const RegisterRSVPHandler =
   (
