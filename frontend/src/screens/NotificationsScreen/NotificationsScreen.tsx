@@ -1,4 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+
 import {FlatList, Image, StyleSheet, View} from 'react-native';
 import TextElement from '../../components/reusable/TextElement';
 
@@ -10,13 +12,16 @@ const NOTIFICATION_KEY = 'SAVED_NOTIFICATIONS';
 const NotificationsScreen = () => {
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
 
-  useEffect(() => {
-    const loadNotifications = async () => {
-      const stored = await AsyncStorage.getItem(NOTIFICATION_KEY);
-      setNotifications(stored ? JSON.parse(stored) : []);
-    };
-    loadNotifications();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      const loadNotifications = async () => {
+        const stored = await AsyncStorage.getItem(NOTIFICATION_KEY);
+        setNotifications(stored ? JSON.parse(stored) : []);
+      };
+  
+      loadNotifications();
+    }, [])
+  );
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
