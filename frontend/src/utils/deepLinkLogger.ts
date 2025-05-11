@@ -1,7 +1,5 @@
 import { Linking } from 'react-native';
-/**
- * Logs the incoming deep link URL and optionally parses it.
- */
+
 export const setupDeepLinkLogger = () => {
   Linking.addEventListener('url', ({ url }) => {
     console.log('📥 Deep link received:', url);

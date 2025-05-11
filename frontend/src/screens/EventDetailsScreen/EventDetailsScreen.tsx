@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {
   View,
   Image,
@@ -6,8 +6,9 @@ import {
   ScrollView,
   Dimensions,
   Button,
+  TouchableOpacity,
 } from 'react-native';
-import {useRoute, RouteProp} from '@react-navigation/native';
+import {useRoute, RouteProp, useNavigation} from '@react-navigation/native';
 import TextElement from '../../components/reusable/TextElement';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -29,16 +30,29 @@ type Params = {
 const screenWidth = Dimensions.get('window').width;
 
 const EventDetailsScreen = () => {
-  const route = useRoute<RouteProp<Params, 'EventsDetailsScreen'>>();
-  const {id: eId} = route.params;
-  const id = Number(eId);
-
+  const route = useRoute<RouteProp<{ EventsDetailsScreen: { id: string } }, 'EventsDetailsScreen'>>();
+  const id = Number(route.params?.id);
   const {data: event, refetch} = useGetEventByIdQuery(id);
   const [registerRSVP, {error: registerError}] = useRegisterRSVPMutation();
   const [updateRSVP, {error: updateError}] = useUpdateRSVPMutation();
   const [cancelRSVP, {error: cancelError}] = useCancelRSVPMutation();
 
   const [hasRSVPed, setHasRSVPed] = useState(false);
+
+  const navigation = useNavigation();
+
+useLayoutEffect(() => {
+  if (!navigation.canGoBack()) {
+    navigation.setOptions({
+      headerLeft: () => (
+
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          <TextElement customStyle={{ marginLeft: 15, color: '#007aff' }}>{'< Back'}</TextElement>
+        </TouchableOpacity>
+      ),
+    });
+  }
+}, [navigation]);
 
   useEffect(() => {
     const checkRSVPStatus = async () => {
