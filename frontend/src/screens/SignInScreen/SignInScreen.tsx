@@ -13,7 +13,7 @@ import {validateForm} from '../../utils/formValidator';
 import {useAppDispatch} from '../../hooks/useAppDispatch';
 import {useLoginMutation} from '../../services/auth/authApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { setAuthenticated } from '../../services/auth/authSlice';
+import {setAuthenticated} from '../../services/auth/authSlice';
 
 type FieldKey = 'email' | 'password';
 
@@ -28,7 +28,7 @@ const formFields: {
 
 const SignInScreen = () => {
   const dispatch = useAppDispatch();
-  const [login] = useLoginMutation();
+  const [login, {error: signInError}] = useLoginMutation();
 
   const [formState, setFormState] = useState<FormState>(() =>
     Object.fromEntries(formFields.map(f => [f.key, ''])),
@@ -60,8 +60,11 @@ const SignInScreen = () => {
         dispatch(setAuthenticated(true));
       }
     } catch (e) {
-      console.error('Login failed:', e);
-      Alert.alert('Login failed', 'Invalid credentials or network issue');
+      console.warn('Login failed:', e);
+      Alert.alert(
+        'Login Failed',
+        signInError ? JSON.stringify(signInError) : 'Invalid credentials',
+      );
     }
   };
 
