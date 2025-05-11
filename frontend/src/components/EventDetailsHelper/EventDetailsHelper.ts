@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert} from 'react-native';
+import {onCreateTriggerNotification, onDisplayNotification} from '../NotificationsHandler/NotificationsHandler';
 
 export const RegisterRSVPHandler =
   (
@@ -8,6 +9,7 @@ export const RegisterRSVPHandler =
     refetch: any,
     setHasRSVPed: any,
     registerError: any,
+    event: any,
   ) =>
   async () => {
     try {
@@ -19,6 +21,9 @@ export const RegisterRSVPHandler =
       await registerRSVP({id, userName}).unwrap();
       await refetch().unwrap();
       setHasRSVPed(true);
+
+      setTimeout(()=> onDisplayNotification(event),1000)
+      onCreateTriggerNotification(event);
     } catch (e) {
       console.error('Error in RSVP:', e);
       Alert.alert(
