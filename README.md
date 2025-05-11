@@ -1,6 +1,15 @@
+<table>
+   <tr>
+     <td align="center" colspan="3">
+      <img src="frontend/assets/loom-preview.png" alt="Preview" width="100%"/><br/>
+      <sub>App Preview</sub>
+    </td>
+  </tr>
+</table>
+
 <p align="center">
   <a href="https://www.loom.com/share/8476a95993c9429cba041eaa5db65886">
-    <img src="frontend/assets/loom-preview.png" alt="Watch Demo Video" width="100%" />
+    <img src="assets/loom-preview.png" alt="Watch Demo Video" width="100%" />
   </a>
 </p>
 
