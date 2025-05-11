@@ -13,6 +13,8 @@ import colors from '../constants/colors';
 // Icons
 import EventsTabIcon from '../../assets/Events/EventsTabIcon'; // Adjust the path as needed
 import NotificationTabIcon from '../../assets/Notifications/NotificationTabIcon'; // Adjust the path as needed
+import LogoutTabIcon from '../../assets/Logout/LogoutTabIcon'; // Adjust the path as needed
+import LogoutScreen from '../screens/LogOutScreen/LogoutScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -29,6 +31,8 @@ const TabBarIcon = ({
       return <EventsTabIcon color={focused ? colors.primary : '#000'} />;
     case 'Notifications':
       return <NotificationTabIcon color={focused ? colors.primary : '#000'} />;
+      case 'Logout':
+        return <LogoutTabIcon color={focused ? colors.primary : '#000'} />;
     default:
       return null;
   }
@@ -45,6 +49,7 @@ const TabNavigator = () => {
       })}>
       <Tab.Screen name="Events" component={EventsScreen} />
       <Tab.Screen name="Notifications" component={NotificationsScreen} />
+      <Tab.Screen name="Logout" component={LogoutScreen} />
     </Tab.Navigator>
   );
 };
