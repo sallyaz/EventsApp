@@ -45,7 +45,6 @@ useLayoutEffect(() => {
   if (!navigation.canGoBack()) {
     navigation.setOptions({
       headerLeft: () => (
-
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <TextElement customStyle={{ marginLeft: 15, color: '#007aff' }}>{'< Back'}</TextElement>
         </TouchableOpacity>
