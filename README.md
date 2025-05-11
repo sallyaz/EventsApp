@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://www.loom.com/share/8476a95993c9429cba041eaa5db65886">
+    <img src="frontend/assets/loom-preview.png" alt="Watch Demo Video" width="100%" />
+  </a>
+</p>
+
 # 🎉 Events App
 
 A beautifully designed public mobile app that allows users to RSVP to upcoming events, receive notifications, and enjoy seamless navigation — powered by a JSON-based Node.js backend.
@@ -83,11 +89,9 @@ npm run ios        # for iOS
 
 ### Frontend
 - React Native  
-- Redux Toolkit
-- RTK Query
+- Redux Toolkit  
 - TypeScript  
-- React Navigation
-- Bottom Tab Navigation
+- React Navigation  
 
 ### Backend
 - Node.js  
@@ -123,10 +127,6 @@ npm run ios        # for iOS
       <img src="frontend/assets/event-details.png" alt="Event Details" width="200"/><br/>
       <sub>Event Details</sub>
     </td>
- <td align="center">
-      <img src="frontend/assets/event-details.png" alt="Event Details" width="200"/><br/>
-      <sub>Event Details Before RSVP</sub>
-    </td>
     <td align="center">
       <img src="frontend/assets/notifications.png" alt="Notifications" width="200"/><br/>
       <sub>Notifications</sub>
@@ -149,10 +149,11 @@ You can simulate a push notification or deep link by using the following command
 ```bash
 xcrun simctl openurl booted rsvpevents://event/4
 ```
-Or Using adb in android simulator
+
+You can simulate a push notification or deep link by using the following command in your terminal (Mac only, for iOS simulator):
 
 ```bash
-adb shell am start -W -a android.intent.action.VIEW -d "rsvpevents://events/4" com.frontend
+xcrun simctl openurl booted rsvpevents://event/4
 ```
 
 This will open the app in the simulator and navigate directly to the event with ID `4`, mimicking the behavior of a notification or link click.
@@ -163,7 +164,7 @@ This will open the app in the simulator and navigate directly to the event with 
 - The app must already be built and installed in the simulator.
 - The app must be configured to handle the `rsvpevents://` scheme via `react-navigation` and `linking`.
 
-For more info, see [React Navigation Deep Linking Docs](https://reactnavigation.org/docs/deep-linking/)
+More info: [React Navigation Deep Linking Docs](https://reactnavigation.org/docs/deep-linking/)
 
 ---
 
@@ -176,3 +177,4 @@ This project is licensed under the **MIT License**.
 ## ⭐ GitHub
 
 [View Repository →](https://github.com/YOUR_USERNAME/Events-App)
+
