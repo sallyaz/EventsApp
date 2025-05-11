@@ -18,6 +18,7 @@ import {
 } from '../../services/events/eventsApi';
 import {goBack} from '../../utils/navigationRef';
 import {CancelRSVPHandler, RegisterRSVPHandler, UpdateRSVPHandler} from '../../components/EventDetailsHelper/EventDetailsHelper';
+import ButtonElement from '../../components/reusable/ButtonElement';
 
 type Params = {
   EventsDetailsScreen: {
@@ -63,7 +64,7 @@ const EventDetailsScreen = () => {
       </View>
     );
   }
-  const onRegister = RegisterRSVPHandler(id,registerRSVP,refetch,setHasRSVPed,registerError);;
+   const onRegister = RegisterRSVPHandler(id,registerRSVP,refetch,setHasRSVPed,registerError, event);;
    const onUpdate = UpdateRSVPHandler(id, event, updateRSVP, refetch, updateError);
    const onCancel = CancelRSVPHandler( goBack, cancelRSVP, id, refetch, event, setHasRSVPed, cancelError);
 
@@ -86,9 +87,9 @@ const EventDetailsScreen = () => {
           {!hasRSVPed && <Button title="Register RSVP" onPress={onRegister} />}
           {hasRSVPed && (
             <>
-              <Button title="Update RSVP"  onPress={onUpdate}/>
+              <ButtonElement title="Update RSVP"  onPress={onUpdate}/>
               <View style={{marginVertical: 6}} />
-              <Button title="Cancel RSVP" color="red" onPress={onCancel}/>
+              <ButtonElement title="Cancel RSVP" color="red" onPress={onCancel}/>
             </>
           )}
         </View>
