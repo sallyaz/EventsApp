@@ -25,9 +25,8 @@ const EventCardItem = ({
   image,
 }: EventCardProps) => {
   const { data: latestEvent } = useGetEventByIdQuery(id);
-  console.log("🚀 ~ latestEvent:", latestEvent)
 
- // Use freshest data if available
+ // Use fresh data if available
  const activeEvent = latestEvent ?? {
     id,
     title,
