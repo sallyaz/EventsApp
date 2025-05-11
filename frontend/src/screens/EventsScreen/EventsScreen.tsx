@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {FlatList, Image, StyleSheet, RefreshControl, View} from 'react-native';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  RefreshControl,
+  View,
+  Platform,
+} from 'react-native';
 import {navigate} from '../../utils/navigationRef';
 
 // Reusable Components
@@ -7,10 +14,10 @@ import TextElement from '../../components/reusable/TextElement';
 import ButtonElement from '../../components/reusable/ButtonElement';
 import ScreenWrapper from '../../components/screenWrapper/ScreenWrapper';
 import colors from '../../constants/colors';
-import { useGetAllEventsQuery } from '../../services/events/eventsApi';
+import {useGetAllEventsQuery} from '../../services/events/eventsApi';
 
 type ItemProps = {
-  id:number;
+  id: number;
   title: string;
   date: string;
   location: string;
@@ -28,7 +35,12 @@ const Item = ({
   description,
   image,
 }: ItemProps) => (
-  <View style={styles.item}>
+  <View
+    style={{
+      ...styles.item,
+      borderWidth: Platform.OS === 'ios' ? 0.5 : 1,
+      padding: 20,
+    }}>
     <View style={{flexDirection: 'column', justifyContent: 'space-between'}}>
       <Image
         source={require('../../../assets/Events/eventsIcon.png')}
@@ -63,7 +75,7 @@ const Item = ({
 
 const EventsScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
-  const { data, refetch } = useGetAllEventsQuery();
+  const {data, refetch} = useGetAllEventsQuery();
 
   const onRefresh = async () => {
     await refetch();
@@ -72,7 +84,7 @@ const EventsScreen = () => {
 
   return (
     <ScreenWrapper
-      style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
+      style={styles.screenWrap}
       backgroundColor={colors.bgColor}>
       {!data || data.length === 0 ? (
         <View style={{width: '90%'}}>
@@ -117,6 +129,11 @@ const EventsScreen = () => {
 export default EventsScreen;
 
 const styles = StyleSheet.create({
+  screenWrap: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   image: {
     width: 50,
     height: 50,
@@ -131,8 +148,6 @@ const styles = StyleSheet.create({
 
   item: {
     borderRadius: 15,
-    borderWidth: 0.2,
-    padding: 20,
     marginVertical: 10,
     marginHorizontal: 16,
     shadowColor: '#000',
@@ -142,7 +157,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 6,
-    elevation: 4,
   },
   title: {
     fontSize: 32,
