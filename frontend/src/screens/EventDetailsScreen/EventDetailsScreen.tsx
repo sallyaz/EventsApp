@@ -18,7 +18,7 @@ import {
   useUpdateRSVPMutation,
 } from '../../services/events/eventsApi';
 import {goBack} from '../../utils/navigationRef';
-import {CancelRSVPHandler, RegisterRSVPHandler, UpdateRSVPHandler} from '../../components/EventDetailsHelper/EventDetailsHelper';
+import {CancelRSVPHandler, RegisterRSVPHandler, UpdateRSVPHandler} from '../../components/eventDetailsHelper/eventDetailsHelper';
 import ButtonElement from '../../components/reusable/ButtonElement';
 
 const screenWidth = Dimensions.get('window').width;
