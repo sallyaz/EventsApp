@@ -38,7 +38,7 @@ const ButtonElement: React.FC<ButtonElementProps> = ({
       <Text
         style={[
           styles.text,
-          {color: disabled ? colors.grey : colors.nearlyWhite},
+          {color: disabled ? colors.lightGray : colors.nearlyWhite},
         ]}>
         {title}
       </Text>
