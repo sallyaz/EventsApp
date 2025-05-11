@@ -83,9 +83,11 @@ npm run ios        # for iOS
 
 ### Frontend
 - React Native  
-- Redux Toolkit  
+- Redux Toolkit
+- RTK Query
 - TypeScript  
-- React Navigation  
+- React Navigation
+- Bottom Tab Navigation
 
 ### Backend
 - Node.js  
@@ -97,14 +99,71 @@ npm run ios        # for iOS
 
 ## 🖼️ App Screenshots
 
-![App Screenshot](Simulator Screenshot - iPhone 14 - 2025-05-11 at 15.06.37.png)
-![App Screenshot](Simulator Screenshot - iPhone 14 - 2025-05-11 at 15.06.38.png)
-![App Screenshot](Simulator Screenshot - iPhone 14 - 2025-05-11 at 15.06.40.png)
-![App Screenshot](Simulator Screenshot - iPhone 16 Pro Max - 2025-05-11 at 15.01.41.png)
-![App Screenshot](Simulator Screenshot - iPhone 16 Pro Max - 2025-05-11 at 15.01.43.png)
-![App Screenshot](Simulator Screenshot - iPhone 16 Pro Max - 2025-05-11 at 15.02.01.png)
-![App Screenshot](Simulator Screenshot - iPhone 16 Pro Max - 2025-05-11 at 15.02.07.png)
-![App Screenshot](Simulator Screenshot - iPhone 16 Pro Max - 2025-05-11 at 15.02.16.png)
+<table>
+  <tr>
+    <td align="center">
+      <img src="frontend/assets/splash.png" alt="Splash" width="200"/><br/>
+      <sub>Splash Screen</sub>
+    </td>
+    <td align="center">
+      <img src="frontend/assets/onbording.png" alt="Onboarding" width="200"/><br/>
+      <sub>Onboarding</sub>
+    </td>
+    <td align="center">
+      <img src="frontend/assets/login.png" alt="Login" width="200"/><br/>
+      <sub>Login</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="frontend/assets/events.png" alt="Events" width="200"/><br/>
+      <sub>Events List</sub>
+    </td>
+    <td align="center">
+      <img src="frontend/assets/event-details.png" alt="Event Details" width="200"/><br/>
+      <sub>Event Details</sub>
+    </td>
+ <td align="center">
+      <img src="frontend/assets/event-details.png" alt="Event Details" width="200"/><br/>
+      <sub>Event Details Before RSVP</sub>
+    </td>
+    <td align="center">
+      <img src="frontend/assets/notifications.png" alt="Notifications" width="200"/><br/>
+      <sub>Notifications</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" colspan="3">
+      <img src="frontend/assets/push.png" alt="Push Notification" width="200"/><br/>
+      <sub>Push Notification Preview</sub>
+    </td>
+  </tr>
+</table>
+
+---
+
+## 📲 Deep Linking & Push Notification Testing
+
+You can simulate a push notification or deep link by using the following command in your terminal (Mac only, for iOS simulator):
+
+```bash
+xcrun simctl openurl booted rsvpevents://event/4
+```
+Or Using adb in android simulator
+
+```bash
+adb shell am start -W -a android.intent.action.VIEW -d "rsvpevents://events/4" com.frontend
+```
+
+This will open the app in the simulator and navigate directly to the event with ID `4`, mimicking the behavior of a notification or link click.
+
+### ✅ Prerequisites
+
+- Xcode and iOS Simulator must be installed.
+- The app must already be built and installed in the simulator.
+- The app must be configured to handle the `rsvpevents://` scheme via `react-navigation` and `linking`.
+
+For more info, see [React Navigation Deep Linking Docs](https://reactnavigation.org/docs/deep-linking/)
 
 ---
 
