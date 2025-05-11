@@ -77,6 +77,8 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   card: {
+    marginVertical: 10,
+    width: '98%',
     backgroundColor: '#ffffff',
     padding: 16,
     borderRadius: 12,
@@ -85,7 +87,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 4,
     elevation: 3,
-    marginBottom: 12,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -94,6 +95,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   title: {
+    width: '85%',
     fontSize: 16,
     fontWeight: '600',
     color: '#111827',
