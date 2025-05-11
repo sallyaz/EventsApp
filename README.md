@@ -50,6 +50,18 @@ A beautifully designed public mobile app that allows users to RSVP to upcoming e
 | POST   | `/login` | User login |
 
 ---
+## 🔐 Mock User Credentials
+
+You can use the following mock user accounts to log in and test the RSVP functionality:
+
+| Username | Email            | Password   |
+|----------|------------------|------------|
+| sally    | sally@test.com   | 12345678   |
+| Shai     | test@test.com    | 12121212   |
+
+Login requests should be made via the `/login` endpoint.
+
+---
 
 ## 🔧 Environment
 
