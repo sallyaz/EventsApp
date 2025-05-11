@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
+import { View, StyleSheet, ViewStyle, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface ScreenWrapperProps {
@@ -19,6 +19,7 @@ const ScreenWrapper = ({
 
   return (
     <Container style={[styles.wrapper, { backgroundColor }, style]}>
+      <StatusBar barStyle="dark-content"/>
       {children}
     </Container>
   );
