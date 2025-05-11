@@ -24,3 +24,10 @@ export interface FormState {
       guests: number;
     };
   }
+
+  export type NotificationItem = {
+    id: string;
+    title: string;
+    body: string;
+    timestamp: string;
+  };
